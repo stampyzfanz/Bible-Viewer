@@ -13,14 +13,13 @@ let pos;
 
 let bibleVerseUp = false;
 
-async function setup() {
+function setup() {
 	// createCanvas(600, 400);
 	noCanvas();
 
 	coordStuff();
 
 	loadJSON('books_of_bible.json', gotBooksData);
-	// loadJSON('https://bible-api.com/john 3:16', got_data, 'jsonp');
 }
 
 function coordStuff() {
@@ -91,6 +90,8 @@ function makeGUI() {
 
 	verse_text = createP('Please choose verse!');
 	verse_text.position('inherit', 20);
+
+	update();
 }
 
 function draw() {
@@ -110,28 +111,6 @@ function update() {
 
 	let book_data = bible_formatted_data[book];
 
-	// the below is legacy code, my JSON doc has total amount of verses, 
-	// not verses in current chapter (obviously, it doesn't have THAT much data)
-
-	// if (verse != 'all') {
-	// 	verse = int(verse);
-	// }
-
-	// let good_verse = false;
-	// if (typeof verse == 'number') {
-	// 	if (verse < book_data[0] && verse > 0) {
-	// 		good_verse = true;
-	// 		console.log(book_data[0], verse);
-	// 	}
-	// } else if (verse === 'all') {
-	// 	verse = '';
-	// }
-
-	// if (!(good_verse)) {
-	// 	verse = '';
-	// 	// alert('Please fix verse');
-	// }
-
 	chapter = int(chapter);
 
 	let good_chapter = false;
@@ -140,11 +119,6 @@ function update() {
 			good_chapter = true;
 		}
 	}
-
-	if (!(good_chapter)) {
-		// alert('Please fix chapter');
-	}
-	// loadJSON('https://bible-api.com/john 3:16', got_data, 'jsonp');
 
 	if (verse === 'all') {
 		loadJSON('https://bible-api.com/' + book + chapter, got_data, 'jsonp');	
@@ -159,11 +133,7 @@ function got_data(newData) {
 
 	let verse_data = '';
 	for (let i of data.verses) {
-		verse_data += (i.text + '<sup>' + i.verse + '</sup>fillertext');
-		// console.log(verse_data);
+		verse_data += ('<sup>' + i.verse + '</sup>' + i.text + '<br/>');
 	}
-
-	verse_data = verse_data.replace(/fillertext/g, '<br/>');
-
 	verse_text.html(verse_data);
 }
